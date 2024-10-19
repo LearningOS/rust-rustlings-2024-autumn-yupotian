@@ -2,8 +2,6 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
-
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 #[derive(Debug, Clone)]
@@ -28,20 +26,29 @@ impl Graph for UndirectedGraph {
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>> {
         &self.adjacency_table
     }
-    fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
-    }
+    // fn add_edge(&mut self, edge: (&str, &str, i32)) {
+    //
+    // }
 }
 pub trait Graph {
     fn new() -> Self;
     fn adjacency_table_mutable(&mut self) -> &mut HashMap<String, Vec<(String, i32)>>;
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
     fn add_node(&mut self, node: &str) -> bool {
-        //TODO
-		true
+        if self.adjacency_table_mutable().contains_key(node) {
+            return false;
+        }else {
+            self.adjacency_table_mutable().insert(String::from(node), Vec::new());
+            return true;
+        }
+
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        self.add_node(edge.0);
+        self.add_node(edge.1);
+        let (a,b,c) = edge;
+        self.adjacency_table_mutable().get_mut(&String::from(a)).unwrap().push((String::from(b), c));
+        self.adjacency_table_mutable().get_mut(&String::from(b)).unwrap().push((String::from(a), c));
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
